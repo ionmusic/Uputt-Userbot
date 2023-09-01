@@ -79,8 +79,7 @@ async def get_user(event):
                     probable_user_mention_entity,
                     MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
-                replied_user = await event.client(GetFullUserRequest(user_id))
-                return replied_user
+                return await event.client(GetFullUserRequest(user_id))
         try:
             user_object = await event.client.get_entity(user)
             replied_user = await event.client(GetFullUserRequest(user_object.id))

@@ -136,7 +136,7 @@ async def play_music_(event):
         if len(link.strip().split()) > 1:
             link = link.strip().split()
     Xd = Ayiin(chat, event)
-    song_name = song_name[:30] + "..."
+    song_name = f"{song_name[:30]}..."
     if not Xd.group_call.is_connected:
         if not (await Xd.vc_joiner()):
             return
@@ -212,7 +212,7 @@ async def play_music_(event):
         song, thumb, song_name, link, duration = await file_download(
             msg, song, fast_download=False
         )
-        song_name = song_name[:30] + "..."
+        song_name = f"{song_name[:30]}..."
         if not Xd.group_call.is_connected:
             if not (await Xd.vc_joiner()):
                 return
@@ -403,10 +403,10 @@ async def lstqueue(event):
             return await event.eor(get_string("error_1").format(str(e)))
     else:
         chat = event.chat_id
-    q = list_queue(chat)
-    if not q:
+    if q := list_queue(chat):
+        await event.eor(f"• <strong>Queue:</strong>\n\n{q}", parse_mode="html")
+    else:
         return await event.eor("Maaf Tidak Ada Playlist...")
-    await event.eor("• <strong>Queue:</strong>\n\n{}".format(q), parse_mode="html")
 
 
 @ayiin_cmd(pattern="delplaylist")
@@ -416,7 +416,7 @@ async def clean_queue(event):
         try:
             chat = await event.client.parse_id(chat)
         except Exception as e:
-            return await event.eor("**ERROR:**\n{}".format(str(e)))
+            return await event.eor(f"**ERROR:**\n{str(e)}")
     else:
         chat = event.chat_id
     if VC_QUEUE.get(chat):
